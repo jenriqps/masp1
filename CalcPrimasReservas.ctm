@@ -4,7 +4,7 @@
 		<Name>Primas y Reservas</Name>
 		<Description>Cálculo de primas de tarifa, netas, y de gastos, así como sus respectivas reservas para varios ejemplos.</Description>
 		<GUID>C6AC34BD-D14A-4CF5-BF2F-A110711BF819</GUID>
-		<Procedures>iml, sql</Procedures>
+		<Procedures>iml, sql, sgplot</Procedures>
 		<Version>3.71</Version>
 		<Links>
 	            <Link href="http://documentation.sas.com/?softwareId=STUDIOMID&amp;softwareVersion=3.71&amp;softwareContextId=tasks&amp;requestor=inapp" nlsKey="LinkKey999">SAS Studio Task Reference Guide</Link>
@@ -27,11 +27,11 @@
 
 		<!--- Define the task options.             -->
 		<Options>
-			<Option name="DATATAB" inputType="string">DATA</Option>
-			<Option name="DATAGROUP" inputType="string">DATA</Option>
+			<Option name="DATATAB" inputType="string">DATOS</Option>
+			<Option name="DATAGROUP" inputType="string">Tabla de Mortalidad</Option>
 			<Option name="ROLESGROUP" inputType="string">ROLES</Option>
 
-			<Option name="OPTIONSTAB" inputType="string">OPTIONS</Option>
+			<Option name="OPTIONSTAB" inputType="string">OPCIONES</Option>
 
 			<Option name="GROUP" inputType="string">GROUPS</Option>
 			<Option name="labelEXAMPLE" inputType="string">An example of a group.  Groups are used to organize options.</Option>
@@ -44,16 +44,16 @@
 			<Option name="labelCOLOR" inputType="string">An example of a color selector.</Option>
 			<Option name="colorEXAMPLE" defaultValue="red" inputType="color">Choose a color</Option>
 			
-			<Option name="GROUPCOMBO" inputType="string">COMBOBOX</Option>
-			<Option name="labelCOMBO" inputType="string">An example of a combobox.</Option>
-			<Option name="comboEXAMPLE" defaultValue="value2" inputType="combobox">Combobox:</Option>
-			<Option name="value1" inputType="string">Value 1</Option>
-			<Option name="value2" inputType="string">Value 2</Option>
-			<Option name="value3" inputType="string">Value 3</Option>
+			<Option name="GROUPCOMBO" inputType="string">EJEMPLO</Option>
+			<Option name="labelCOMBO" inputType="string">Selecciona tu ejemplo. El contexto del ejemplo lo puedes encontrar en las notas de clase.</Option>
+			<Option name="comboEXAMPLE" defaultValue="value2" inputType="combobox">Selecciona de la lista:</Option>
+			<Option name="value1" inputType="string">Ejemplo 6</Option>
+			<Option name="value2" inputType="string">Ejemplo 7</Option>
+			<Option name="value3" inputType="string">Ejemplo 8 y 9</Option>
 			
-			<Option name="GROUPDATE" inputType="string">DATE PICKER</Option>
-			<Option name="labelDATE" inputType="string">An example of a date picker.</Option>
-			<Option name="dateEXAMPLE" inputType="datepicker" format="monyy7.">Choose a date:</Option>
+			<Option name="GROUPDATE" inputType="string">FECHA</Option>
+			<Option name="labelDATE" inputType="string">Fecha de cálculo.</Option>
+			<Option name="dateEXAMPLE" inputType="datepicker" format="date9.">Elige una fecha:</Option>
 			
 			<Option name="GROUPDISTINCT" inputType="string">DISTINCT</Option>
 			<Option name="labelDISTINCT" inputType="string">An example of a distinct control.  The "Required variable" must be assigned in order for this control to populate.</Option>
@@ -67,11 +67,35 @@
 			<Option name="labelSELECT" inputType="string">An example of a select.  This example is set up for multiple selection.</Option>
 			<Option name="selectEXAMPLE" inputType="select" multiple="true">Select:</Option>
 			
-			<Option name="GROUPNUMSTEPPER" inputType="string">NUMERIC STEPPER</Option>
-			<Option name="labelNumStepperEXAMPLE1" inputType="string">An example of a basic numeric stepper.</Option>
+			<!-- Parámetros -->
+			<Option name="GROUPNUMSTEPPER" inputType="string">PARÁMETROS</Option>
+			<Option name="labelNumStepperEXAMPLE0" inputType="string">An example of a basic numeric stepper.</Option>
 			<Option name="basicStepperEXAMPLE" defaultValue="5" inputType="numstepper" indent="1">Basic numeric stepper:</Option>
-			<Option name="labelNumStepperEXAMPLE2" inputType="string">An example of a numeric stepper with a minimum value of -10, a maximum value of 120, and an increment of 2.</Option>
-			<Option name="advancedStepperEXAMPLE" defaultValue="80" inputType="numstepper" increment="2" minValue="-10" maxValue="120" decimalPlaces="0,2" indent="1">Advanced numeric stepper:</Option>
+			<Option name="labelNumStepperEXAMPLE1" inputType="string">Edad.</Option>
+			<Option name="advancedStepperEXAMPLE1" defaultValue="30" inputType="numstepper" increment="1" minValue="0" maxValue="110" decimalPlaces="0,0" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE2" inputType="string">Monto del beneficio.</Option>
+			<Option name="advancedStepperEXAMPLE2" defaultValue="1000" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE3" inputType="string">Monto fijo de gastos (durante toda la vida del producto) (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE3" defaultValue="5" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE4" inputType="string">Porcentaje fijo de gastos de la prima de tarifa (durante toda la vida del producto) (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE4" defaultValue="0.10" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE5" inputType="string">Monto fijo inicial de gastos (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE5" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE6" inputType="string">Monto fijo final de gastos (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE6" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE7" inputType="string">Monto de la prima de tarifa (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE7" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE8" inputType="string">Temporalidad del seguro (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE8" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE9" inputType="string">Unidad del beneficio (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE9" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE10" inputType="string">Monto fijo de gastos en función de la unidad del beneficio  (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE10" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE11" inputType="string">Monto fijo de gastos en función de la unidad del beneficio y pagadero durante la vida del producto (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE11" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="labelNumStepperEXAMPLE12" inputType="string">Porcentaje inicial fijo de gastos de la prima de tarifa (aplica dependiendo del ejemplo).</Option>
+			<Option name="advancedStepperEXAMPLE12" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			
 
 			<Option name="GROUPRADIO" inputType="string">RADIO BUTTONS</Option>
 			<Option name="labelRADIO" inputType="string">An example of radio buttons.  One radio button can be selected at a time.</Option>
@@ -151,18 +175,16 @@
 		</Container>
 
 		<Container option="OPTIONSTAB">
+			<!--
 			<Group option="GROUP" open="true">
 				<OptionItem option="labelEXAMPLE"/>
 			</Group>
-
+			
 			<Group option="GROUPCHECK">
 				<OptionItem option="labelCHECK"/>
 				<OptionItem option="chkEXAMPLE"/>
-			</Group>
-
-
+			</Group>		
 			
-			<!--
 			<Group option="GROUPCOLOR">
 				<OptionItem option="labelCOLOR"/>
 				<OptionItem option="colorEXAMPLE"/>
@@ -183,6 +205,7 @@
 				<OptionItem option="dateEXAMPLE"/>
 			</Group>
 			
+			<!--
 			<Group option="GROUPDISTINCT">
 				<OptionItem option="labelDISTINCT"/>
 				<OptionChoice option="distinctEXAMPLE"/>
@@ -210,14 +233,41 @@
 					<OptionItem option="value3"/>
 				</OptionChoice>
 			</Group>
-
+			-->
+			
+			<!-- Parámetros -->
 			<Group option="GROUPNUMSTEPPER">
-				<OptionItem option="labelNumStepperEXAMPLE1"/>
+				<!--
+				<OptionItem option="labelNumStepperEXAMPLE0"/>
 				<OptionItem option="basicStepperEXAMPLE"/>
+				-->
+				<OptionItem option="labelNumStepperEXAMPLE1"/>
+				<OptionItem option="advancedStepperEXAMPLE1"/>
 				<OptionItem option="labelNumStepperEXAMPLE2"/>
-				<OptionItem option="advancedStepperEXAMPLE"/>
+				<OptionItem option="advancedStepperEXAMPLE2"/>
+				<OptionItem option="labelNumStepperEXAMPLE3"/>
+				<OptionItem option="advancedStepperEXAMPLE3"/>
+				<OptionItem option="labelNumStepperEXAMPLE4"/>
+				<OptionItem option="advancedStepperEXAMPLE4"/>				
+				<OptionItem option="labelNumStepperEXAMPLE5"/>
+				<OptionItem option="advancedStepperEXAMPLE5"/>				
+				<OptionItem option="labelNumStepperEXAMPLE6"/>
+				<OptionItem option="advancedStepperEXAMPLE6"/>				
+				<OptionItem option="labelNumStepperEXAMPLE7"/>
+				<OptionItem option="advancedStepperEXAMPLE7"/>				
+				<OptionItem option="labelNumStepperEXAMPLE8"/>
+				<OptionItem option="advancedStepperEXAMPLE8"/>				
+				<OptionItem option="labelNumStepperEXAMPLE9"/>
+				<OptionItem option="advancedStepperEXAMPLE9"/>				
+				<OptionItem option="labelNumStepperEXAMPLE10"/>
+				<OptionItem option="advancedStepperEXAMPLE10"/>				
+				<OptionItem option="labelNumStepperEXAMPLE11"/>
+				<OptionItem option="advancedStepperEXAMPLE11"/>				
+				<OptionItem option="labelNumStepperEXAMPLE12"/>
+				<OptionItem option="advancedStepperEXAMPLE12"/>		
 			</Group>
 
+			<!--
 			<Group option="GROUPRADIO">
 				<OptionItem option="labelRADIO"/>
 				<OptionItem option="radioButton1"/>
@@ -249,13 +299,16 @@
 				<OptionItem option="labelPasswordEXAMPLE"/>
 				<OptionItem option="passwordEXAMPLE"/>
 			</Group>
+			-->
 
 		</Container>
 		
+		<!--
 		<Container option="OPTIONSTABLETAB">
 			<OptionItem option="labelOptionTableEXAMPLE"/>
 			<OptionItem option="optionTableEXAMPLE"/>
 		</Container>
+		-->
 		
 	</UI>
 
