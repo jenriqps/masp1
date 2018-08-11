@@ -87,3 +87,73 @@
 	run;
 	title;
 %mend;
+
+%macro mortTable2Sankey(data=,age=,death=,alive=);
+
+	proc datasets lib=trsf;
+		delete ilt_sankey;
+	run;
+
+	proc sql;
+		select min(&age.) into: minAge
+		from &data.
+		;
+		select max(&age.) into: maxAge
+		from &data.
+		;	
+		select &alive. format 32. into: aliveInit
+		from &data.
+		where &age. = &minAge.
+		;
+	quit;
+	
+	%put &aliveInit.;
+	
+	data sankey;
+		do subject = 1 to &aliveInit.;
+			moment=&minAge.;
+			status=1;
+			output;
+		end;
+	run;
+	
+	data _null_;
+		set &data.;
+		var="var_"||compress(put(&age.,3.));
+		call symputx(var,max(floor(&death.),1));
+	run;
+
+	%do x=&minAge. %to &maxAge.;
+	
+		%put &&&&var_&&x.;
+		proc surveyselect data=sankey(where=(status=1 and moment=&x.)) sampsize=&&&&var_&&x. out=sankey_smpl seed=321 outall;
+		run;
+		
+		data sankey_smpl(drop=selected);
+			set sankey_smpl;
+			moment = &x.+1;
+			if selected = 1 then status = 0;
+		run;	
+		
+		data sankey_death;
+			set sankey(where=(status=0 and moment=&x.));
+			moment = &x.+1;
+		run;
+		
+		data sankey;
+			set sankey sankey_smpl sankey_death;
+		run;
+		
+		proc freq data=sankey(where=(moment=&x.));
+			table status;
+		run;		
+	%end;
+	
+	data trsf.ilt_sankey;
+		set work.sankey;
+	run;
+	
+	proc datasets lib=work kill;
+	run;
+	
+%mend;
