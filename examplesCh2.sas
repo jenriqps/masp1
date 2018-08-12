@@ -33,15 +33,17 @@ run;
  ,xvar=visit
  ,yvarord=%str(0,1,2,3)
  ,xvarord=%str(1,2,3,4,5,6)
- ,barwidth=0.45
+ ,barwidth=0.25
  ,xfmt=xfmt.
  ,legendtitle=%str(# of Risk Factors)
  );
 */
-
+/*
 %mortTable2Sankey(data=input.ilt,age=age,death=d_x,alive=l_x)
 ;
-/*
+
+
+
 proc freq data=trsf.ilt_sankey;
 	table moment;
 run;
@@ -52,21 +54,52 @@ proc sql;
 	where subject=3000
 	;
 quit;
-*/
 
+
+proc format lib=trsf;
+	value alive
+		1 = "alive"
+		0 = "death";
+run;
+
+proc datasets lib=trsf;
+	modify ilt_sankey;
+	format status alive.;	
+run;
+*/
+/*
+data test;
+	do i=88 to 91;
+	end;
+run;
+
+proc sql noprint;
+	select i into: mom separated by ','
+	from test
+	;
+	create table trsf.ilt_sankey_test as
+	select *
+	from trsf.ilt_sankey
+	where moment between 88 and 91
+	;
+quit;
+
+%put &mom.;
+*/
 /*
 %sankeybarchart
- (data=trsf.ilt_sankey
+ (data=trsf.ilt_sankey_test
  ,subject=subject
  ,yvar=status
  ,xvar=moment
- ,yvarord=%str(0,1)
- ,xvarord=%str(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
- ,barwidth=0.45
+ /*,yvarord=%str(0,alive)
+ /*,xvarord=%str(&mom.)*/
+ ,barwidth=0.05
  ,xfmt=xfmt.
- ,legendtitle=%str(# of Risk Factors)
+ ,legendtitle=%str(Tabla de mortalidad)
  );
  */
+
  
 
  
