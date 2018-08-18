@@ -3,7 +3,7 @@
  * Jose Enrique Perez ;
  * Facultad de Ciencias. Universidad Nacional Autónoma de México ;
  **********************************************************************/
-*options mprint mlogic minoperator fullstimer;
+options mprint mlogic minoperator fullstimer;
 ods graphics / reset width=6.4in height=4.8in imagemap noborder;
 
 title "Las siguientes cantidades se calculan con simulaciones, no con la aproximación de la distribución normal";
