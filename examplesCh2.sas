@@ -15,7 +15,7 @@
 %include "&origen2./sankey.sas";
 %include "&origen2./sankeybarchart.sas";
 
-/*
+
 data dummy;
  do subject = 1 to 100;
  do visit =1 to 6;
@@ -24,6 +24,10 @@ data dummy;
  output;
  end;
  end;
+run;
+
+proc export data=dummy
+file="&origen1./simple_path.csv";
 run;
 
 %sankeybarchart
