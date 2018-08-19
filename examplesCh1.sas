@@ -3,6 +3,8 @@
  * Jose Enrique Perez ;
  * Facultad de Ciencias. Universidad Nacional Autónoma de México ;
  **********************************************************************/
+%let origen=/folders/myfolders/masp1;
+%include "&origen./configuration.sas";
 options mprint mlogic minoperator fullstimer;
 ods graphics / reset width=6.4in height=4.8in imagemap noborder;
 
