@@ -46,10 +46,10 @@
 			
 			<Option name="GROUPCOMBO" inputType="string">EJEMPLO</Option>
 			<Option name="labelCOMBO" inputType="string">Selecciona tu ejemplo. El contexto del ejemplo lo puedes encontrar en las notas de clase.</Option>
-			<Option name="comboEXAMPLE" defaultValue="value2" inputType="combobox">Selecciona de la lista:</Option>
-			<Option name="value1" inputType="string">Ejemplo 6</Option>
-			<Option name="value2" inputType="string">Ejemplo 7</Option>
-			<Option name="value3" inputType="string">Ejemplo 8 y 9</Option>
+			<Option name="comboEXAMPLE" defaultValue="Ejemplo 6" inputType="combobox">Selecciona de la lista:</Option>
+			<Option name="Ejemplo 6" inputType="string">Ejemplo 6</Option>
+			<Option name="Ejemplo 7" inputType="string">Ejemplo 7</Option>
+			<Option name="Ejemplo 8 y 9" inputType="string">Ejemplo 8 y 9</Option>
 			
 			<Option name="GROUPDATE" inputType="string">FECHA</Option>
 			<Option name="labelDATE" inputType="string">Fecha de cálculo.</Option>
@@ -69,8 +69,12 @@
 			
 			<!-- Parámetros -->
 			<Option name="GROUPNUMSTEPPER" inputType="string">PARÁMETROS</Option>
+			<!--
 			<Option name="labelNumStepperEXAMPLE0" inputType="string">An example of a basic numeric stepper.</Option>
 			<Option name="basicStepperEXAMPLE" defaultValue="5" inputType="numstepper" indent="1">Basic numeric stepper:</Option>
+			-->
+			<Option name="labelNumStepperEXAMPLE0" inputType="string">Tasa de Interés (en decimales).</Option>
+			<Option name="advancedStepperEXAMPLE0" defaultValue="0.06" inputType="numstepper" increment="0.001" minValue="0" maxValue="1000000" decimalPlaces="4" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE1" inputType="string">Edad.</Option>
 			<Option name="advancedStepperEXAMPLE1" defaultValue="30" inputType="numstepper" increment="1" minValue="0" maxValue="110" decimalPlaces="0,0" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE2" inputType="string">Monto del beneficio.</Option>
@@ -78,7 +82,7 @@
 			<Option name="labelNumStepperEXAMPLE3" inputType="string">Monto fijo de gastos (durante toda la vida del producto) (aplica dependiendo del ejemplo).</Option>
 			<Option name="advancedStepperEXAMPLE3" defaultValue="5" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE4" inputType="string">Porcentaje fijo de gastos de la prima de tarifa (durante toda la vida del producto) (aplica dependiendo del ejemplo).</Option>
-			<Option name="advancedStepperEXAMPLE4" defaultValue="0.10" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
+			<Option name="advancedStepperEXAMPLE4" defaultValue="0.10" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="2" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE5" inputType="string">Monto fijo inicial de gastos (aplica dependiendo del ejemplo).</Option>
 			<Option name="advancedStepperEXAMPLE5" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="1000000" decimalPlaces="0,01" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE6" inputType="string">Monto fijo final de gastos (aplica dependiendo del ejemplo).</Option>
@@ -194,9 +198,9 @@
 			<Group option="GROUPCOMBO">
 				<OptionItem option="labelCOMBO"/>
 				<OptionChoice option="comboEXAMPLE">
-					<OptionItem option="value1"/>
-					<OptionItem option="value2"/>
-					<OptionItem option="value3"/>
+					<OptionItem option="Ejemplo 6"/>
+					<OptionItem option="Ejemplo 7"/>
+					<OptionItem option="Ejemplo 8 y 9"/>
 				</OptionChoice>
 			</Group>
 			
@@ -241,6 +245,8 @@
 				<OptionItem option="labelNumStepperEXAMPLE0"/>
 				<OptionItem option="basicStepperEXAMPLE"/>
 				-->
+				<OptionItem option="labelNumStepperEXAMPLE0"/>
+				<OptionItem option="advancedStepperEXAMPLE0"/>
 				<OptionItem option="labelNumStepperEXAMPLE1"/>
 				<OptionItem option="advancedStepperEXAMPLE1"/>
 				<OptionItem option="labelNumStepperEXAMPLE2"/>
@@ -316,7 +322,7 @@
 	<CodeTemplate>
 		<![CDATA[
 /*
- * Dump out table information and roles.
+ * Tabla de Mortalidad
  */
  
 %put DATASET=$DATASOURCE;
@@ -330,57 +336,27 @@
 #if( $OPTCVAR.size() > 0 )%put OPTCVAR=#foreach( $item in $OPTCVAR )$item #end;#end
 
 /*
- * Dump out all the option parameters.
+ * Parámetros
  */
 
-/* Checkbox */
-%put checkboxEXAMPLE=$chkEXAMPLE;
+%put $comboEXAMPLE;
+%put Fecha de cálculo=$dateEXAMPLE;
+%put Tasa de Interés (en decimales)=$advancedStepperEXAMPLE0;
+%put Edad=$advancedStepperEXAMPLE1;
+%put Monto del Beneficio=$advancedStepperEXAMPLE2;
+%put Monto fijo de gastos=$advancedStepperEXAMPLE3;
+%put Porcentaje fijo de gastos de la prima de tarifa (durante toda la vida del producto) (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE4;
 
-/* Color */
-%put colorEXAMPLE=$colorEXAMPLE;
+/* Creamos macrovariables */
+%let example_=$comboEXAMPLE;
+%let i_=$advancedStepperEXAMPLE0;
+%let x_=$advancedStepperEXAMPLE1;
+%let bft_=$advancedStepperEXAMPLE2;
+%let fxExp_=$advancedStepperEXAMPLE3;
+%let pcExp_=$advancedStepperEXAMPLE4;
 
-/* Combobox */
-%put comboboxEXAMPLE=$comboEXAMPLE;
+%include "/folders/myfolders/masp1/examplesCh7.sas";
 
-/* Datepicker */
-%put datepickerEXAMPLE=$dateEXAMPLE;
-
-/* Distinct */
-%put distinctEXAMPLE=$distinctEXAMPLE;
-
-/* Lists */
-%put dualselectorEXAMPLE=$dualselectorEXAMPLE;
-%put multientryEXAMPLE=$multientryEXAMPLE;
-%put selectEXAMPLE=$selectEXAMPLE;
-
-/* NumStepper */
-%put basicStepperEXAMPLE=$basicStepperEXAMPLE;
-%put advancedStepperEXAMPLE=$advancedStepperEXAMPLE;
-
-/* Radio Buttons */
-%put radioEXAMPLE=$radioEXAMPLE;
-
-/* Selectors */
-%put outputDataEXAMPLE=$outputDataEXAMPLE;
-%put sasServerPathEXAMPLE=$sasServerPathEXAMPLE;
-
-/* Slider */
-%put sliderEXAMPLE1=$sliderEXAMPLE1;
-%put sliderEXAMPLE2=$sliderEXAMPLE2;
-
-/* Text */
-%put textEXAMPLE=$textEXAMPLE;
-%put validationTextEXAMPLE=$validationTextEXAMPLE;
-%put numberTextEXAMPLE=$numberTextEXAMPLE;
-%put passwordEXAMPLE=$passwordEXAMPLE;
-
-/* Option Table */
-/* Iterate over each row to obtain values */
-#foreach($item in $optionTableEXAMPLE.rows.values)
-%put optionTableRow$item.id = $item
-#end
-;
- 
 		]]>
 	</CodeTemplate>
 </Task>
