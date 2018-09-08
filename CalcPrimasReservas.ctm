@@ -92,13 +92,13 @@
 			<Option name="labelNumStepperEXAMPLE8" inputType="string">Temporalidad del seguro (aplica dependiendo del ejemplo).</Option>
 			<Option name="advancedStepperEXAMPLE8" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE9" inputType="string">Unidad del beneficio (aplica dependiendo del ejemplo).</Option>
-			<Option name="advancedStepperEXAMPLE9" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="advancedStepperEXAMPLE9" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100000" decimalPlaces="0" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE10" inputType="string">Monto fijo de gastos en función de la unidad del beneficio  (aplica dependiendo del ejemplo).</Option>
-			<Option name="advancedStepperEXAMPLE10" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="advancedStepperEXAMPLE10" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100000" decimalPlaces="0" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE11" inputType="string">Monto fijo de gastos en función de la unidad del beneficio y pagadero durante la vida del producto (aplica dependiendo del ejemplo).</Option>
-			<Option name="advancedStepperEXAMPLE11" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="advancedStepperEXAMPLE11" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100000" decimalPlaces="0" indent="1">Selecciona:</Option>
 			<Option name="labelNumStepperEXAMPLE12" inputType="string">Porcentaje inicial fijo de gastos de la prima de tarifa (aplica dependiendo del ejemplo).</Option>
-			<Option name="advancedStepperEXAMPLE12" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100" decimalPlaces="0" indent="1">Selecciona:</Option>
+			<Option name="advancedStepperEXAMPLE12" defaultValue="0" inputType="numstepper" increment="0.01" minValue="0" maxValue="100000" decimalPlaces="2" indent="1">Selecciona:</Option>
 			
 
 			<Option name="GROUPRADIO" inputType="string">RADIO BUTTONS</Option>
@@ -346,14 +346,33 @@
 %put Monto del Beneficio=$advancedStepperEXAMPLE2;
 %put Monto fijo de gastos=$advancedStepperEXAMPLE3;
 %put Porcentaje fijo de gastos de la prima de tarifa (durante toda la vida del producto) (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE4;
+%put Monto fijo inicial de gastos (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE5;  
+%put Monto fijo final de gastos (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE6;
+%put Monto de la prima de tarifa (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE7;
+%put Temporalidad del seguro (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE8;
+%put Unidad del beneficio (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE9;
+%put Monto fijo de gastos en función de la unidad del beneficio (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE10;
+%put Monto fijo de gastos en función de la unidad del beneficio y pagadero durante la vida del producto (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE11;
+%put Porcentaje inicial fijo de gastos de la prima de tarifa (aplica dependiendo del ejemplo)=$advancedStepperEXAMPLE12;
 
-/* Creamos macrovariables */
+
+* Creamos macrovariables ;
 %let example_=$comboEXAMPLE;
 %let i_=$advancedStepperEXAMPLE0;
 %let x_=$advancedStepperEXAMPLE1;
 %let bft_=$advancedStepperEXAMPLE2;
 %let fxExp_=$advancedStepperEXAMPLE3;
 %let pcExp_=$advancedStepperEXAMPLE4;
+%let fxInitExp=$advancedStepperEXAMPLE5;
+%let fxFinExp=$advancedStepperEXAMPLE6;
+%let G=$advancedStepperEXAMPLE7;
+
+%let n=$advancedStepperEXAMPLE8;
+%let unitBft=$advancedStepperEXAMPLE9;
+%let fxExpXunitBft=$advancedStepperEXAMPLE10;
+%let fxExpXunitG=$advancedStepperEXAMPLE11;
+%let pcInitExp=$advancedStepperEXAMPLE12;
+
 
 %include "/folders/myfolders/masp1/examplesCh7.sas";
 
