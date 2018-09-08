@@ -55,6 +55,18 @@
 		close trsf.ILTplus;
 	run;
 	
+	data trsf.ILTplus;
+		set trsf.ILTplus;
+		label x="Edad"
+		l_x = "Núm. de personas vivas de edad x" 
+		d_x = "Núm. de muertos entre las edades x y x+1"
+		q_x = "Probabilidad de que una persona de edad x, muera antes de cumplir o cumpliendo x+1 años"
+		p_x = "Probabilidad de que una persona de edad x, muera después de la edad x+1"
+		e_x = "Esperanza de vida"
+		A_x = "Valor presente actuarial de un seguro vitalicio para (x)"
+		aa_x = "Valor presente actuarial de una anualidad vitalicia para (x)";		
+	run;
+	
 	proc datasets lib=work kill nolist;
 	run;
 
