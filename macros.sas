@@ -179,12 +179,6 @@
 %let p=1000;
 %let xmax=110;
 %seguroVitalicio(A=&A., B=&B., c=&c., i=&i., p=&p., x=&xmax.);
-/*
-%let x6=40;
-%let bft6=1000;
-%let fxExp6=5;
-%let pcExp6=0.1;
-*/
 
 * Implementamos la solución en proc iml;
 
@@ -261,16 +255,6 @@
 
 %if "&example."="Ejemplo 7" %then
 	%do;
-		* Ejercicio 7;
-		/*
-		%let x7=40;
-		%let bft7=.;
-		%let fxExp7=0;
-		%let fxInitExp7=20;
-		%let fxFinExp7=80;
-		%let pcExp7=0.1;
-		%let G7=30;
-		*/
 		
 		* Implementamos la solución en proc iml;
 		proc iml;
@@ -317,7 +301,7 @@
 		
 		* Damos más propiedades a los metadatos;
 		proc sql;
-			create table Pr_Ex7_tipo(tipo_prima char(40));
+			create table Pr_Ex7_tipo(tipo_prima tipo_prima char(40));
 			insert into Pr_Ex7_tipo
 				values("Prima de Tarifa")
 				values("Prima de Beneficios")
@@ -328,6 +312,7 @@
 		data rslt.Pr_Ex7;
 			set Pr_Ex7_tipo;
 			set Pr_Ex7;
+			label tipo_prima = "Tipo de Prima";
 			format porcentaje percent6.2 monto dollar32.2;
 		run;
 		
@@ -347,20 +332,6 @@
 
 %if "&example." = "Ejemplo 8 y 9" %then
 	%do;
-		* Ejercicio 8 & 9;
-		/*
-		%let x8=50;
-		%let n8=10;
-		%let bft8=1000;
-		%let unitBft8=1000;
-		%let fxExp8=5;
-		%let fxExpXunitBft8=10;
-		%let fxExpXunitG8=2;
-		%let fxInitExp8=20;
-		%let fxFinExp8=80;
-		%let pcInitExp8=0.5;
-		%let pcExp8=0.05;
-		*/
 		
 		proc iml;
 			edit trsf.iltplus;
