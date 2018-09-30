@@ -435,3 +435,17 @@
 	%end;
 
 %mend;
+
+%macro portfolio(ds=,lt=);
+
+proc sql;
+	create table rslt.portf_pricing_1 as
+	select 
+	a.*
+	, b.A_x*a.benefit format dollar32.2 as premium label="Premium"
+	from &ds. a inner join &lt. b on (a.age = b.x)
+	where lowcase(product)="seguro vitalicio"
+	;
+quit;
+
+%mend;

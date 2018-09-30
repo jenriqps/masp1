@@ -13,10 +13,10 @@
 
 %web_drop_table(WORK.IMPORT);
 
+* Importación de la tabla de mortalidad ;
+FILENAME REFFILE1 "&origen./inputs/files/ilt.xlsx";
 
-FILENAME REFFILE "&origen./inputs/files/ilt.xlsx";
-
-PROC IMPORT DATAFILE=REFFILE
+PROC IMPORT DATAFILE=REFFILE1
 	DBMS=XLSX
 	OUT=WORK.ilt;
 	GETNAMES=YES;
@@ -31,4 +31,29 @@ data input.ilt;
 		l_x = "Number of lives at age x"
 		d_x = "Number of deaths when age x";	
 run;
+
+* Importación de la cartera de seguros;
+FILENAME REFFILE2 "&origen./inputs/files/portfolio.xlsx";
+
+PROC IMPORT DATAFILE=REFFILE2
+	DBMS=XLSX
+	OUT=WORK.portfolio replace;
+	GETNAMES=YES;
+RUN;
+
+%web_open_table(WORK.IMPORT);
+
+data input.portfolio;
+	format age comma3. benefit dollar30.2;
+	set WORK.portfolio;
+	label age = "Edad"
+		id_insured = "ID del asegurado"
+		benefit = "Suma asegurada"	
+		product = "Tipo de producto"
+		payment_form = "Forma de pago"		
+		;
+		
+run;
+
+
 
