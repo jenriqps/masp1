@@ -29,12 +29,12 @@ ods graphics / reset width=6.4in height=4.8in imagemap noborder;
 
 * Estadísticas básicas del portafolio;
 title "Estadísticas básicas del portafolio";
-proc means data=RSLT.PORTF_PRICING_1;
+proc means data=RSLT.PORTF_PRICING_1 n mean sum max min;
 run;
 title;
 
 * Gráficos;
-title "Edad vs Prima";
+title "Edad vs Suma Asegurada";
 proc sgplot data=RSLT.PORTF_PRICING_1;
 	bubble x=age y=benefit size=premium/ colorresponse=premium 
 		colormodel=(CX09a316 CXdcf331 CXe91717) bradiusmin=7 bradiusmax=14;
