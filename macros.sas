@@ -57,6 +57,7 @@
 	
 	data trsf.ILTplus;
 		set trsf.ILTplus;
+		format l_x d_x comma32.0 q_x p_x e_x A_x aa_x comma32.8;
 		label x="Edad"
 		l_x = "Núm. de personas vivas de edad x" 
 		d_x = "Núm. de muertos entre las edades x y x+1"
@@ -436,16 +437,59 @@
 
 %mend;
 
-%macro portfolio(ds=,lt=);
-
-proc sql;
-	create table rslt.portf_pricing_1 as
-	select 
-	a.*
-	, &i./log(&i.+1)*b.A_x*a.benefit format dollar32.2 as premium label="Premium"
-	from &ds. a inner join &lt. b on (a.age = b.x)
-	where lowcase(product)="seguro vitalicio"
-	;
-quit;
-
+%macro portfolio(ds=,lt=,i=,m=);
+* Macro para tarificar carteras;
+	* Tasas de interés equivalentes;	
+	data _null_;
+		d=1-(1+&i.)**-1;
+		im=&m.*((1+&i.)**(1/&m.)-1);
+		dm=((1-d)**(1/&m.)-1)*(-&m.);
+		call symputx('d',d);
+		call symputx('im',im);
+		call symputx('dm',dm);
+	run;
+	* Identificamos los tipos de productos;
+	proc sql;
+		create table work.prod1 as
+			select *
+			from &ds.
+			where lowcase(product)="seguro vitalicio"
+			;
+		create table work.prod2 as
+			select *
+			from &ds.
+			where lowcase(product)="anualidad vitalicia diferida"
+			;		
+	quit;
+	* Seguro vitalicio pagadero al momento de la muerte;
+	%if %sysfunc(exist(work.prod1)) %then 
+		%do;
+			proc sql;
+				create table rslt.portf_pricing_1 as
+				select 
+				a.*
+				, &i./log(&i.+1)*b.A_x*a.benefit format dollar32.2 as premium label="Premium"
+				from work.prod1 a inner join &lt. b on (a.age = b.x)
+				where lowcase(product)="seguro vitalicio"
+				;
+			quit;
+		%end;
+	* Anualidad vitalicia diferida pagadera m veces al año;
+	%if %sysfunc(exist(work.prod2)) %then 
+		%do;
+			proc sql;
+				create table rslt.portf_pricing_2 as
+				select 
+				a.*
+				, b.l_x/c.l_x*(1+&i.)**(-(a.retirement_age-a.age))*(b.aa_x*&i.*&d./(&im.*&dm.)-(&i.-&im.)/(&im.*&dm.))*a.benefit format dollar32.2 as premium label="Premium"
+				from work.prod2 a inner join &lt. b on (a.retirement_age = b.x) 
+				inner join &lt. c on (a.age = c.x)			
+				where lowcase(product)="anualidad vitalicia diferida"
+				;
+			quit;
+		%end;
+	* Limpiamos work;
+	proc datasets lib=work kill nolist;
+	run;
 %mend;
+

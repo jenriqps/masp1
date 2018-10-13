@@ -55,5 +55,29 @@ data input.portfolio;
 		
 run;
 
+* Importación de la cartera de pensiones;
+FILENAME REFFILE3 "&origen./inputs/files/portfolio_02.xlsx";
+
+PROC IMPORT DATAFILE=REFFILE3
+	DBMS=XLSX
+	OUT=WORK.portfolio_02 replace;
+	GETNAMES=YES;
+RUN;
+
+%web_open_table(WORK.IMPORT);
+
+data input.portfolio_02;
+	format age comma3. benefit dollar30.2;
+	set WORK.portfolio_02;
+	label age = "Edad"
+		id_insured = "ID del pensionado"
+		benefit = "Pensión Anual"	
+		product = "Tipo de producto"
+		retirement_age = "Edad de retiro"
+		freq_pymt_year = "Frecuencia de pago"
+		payment_form = "Forma de pago"		
+		;
+		
+run;
 
 

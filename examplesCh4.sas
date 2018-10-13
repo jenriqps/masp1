@@ -25,17 +25,17 @@ ods graphics / reset width=6.4in height=4.8in imagemap noborder;
 %seguroVitalicio(A=&A., B=&B., c=&c., i=&i., p=1000, x=&xmax.);
 
 * Calculamos la prima de toda la cartera;
-%portfolio(ds=INPUT.PORTFOLIO,lt=TRSF.ILTPLUS,i=&i.,m=1);
+%portfolio(ds=INPUT.PORTFOLIO_02,lt=TRSF.ILTPLUS,i=&i.,m=12);
 
 * Estadísticas básicas del portafolio;
 title "Estadísticas básicas del portafolio";
-proc means data=RSLT.PORTF_PRICING_1 n mean sum min max;
+proc means data=RSLT.PORTF_PRICING_2 n mean sum min max;
 run;
 title;
 
 * Gráficos;
-title "Edad vs Suma Asegurada";
-proc sgplot data=RSLT.PORTF_PRICING_1;
+title "Edad vs Pensión Anual";
+proc sgplot data=RSLT.PORTF_PRICING_2;
 	bubble x=age y=benefit size=premium/ colorresponse=premium 
 		colormodel=(CX09a316 CXdcf331 CXe91717) bradiusmin=7 bradiusmax=14;
 	xaxis grid;
