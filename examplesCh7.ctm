@@ -357,6 +357,7 @@
 
 
 * Creamos macrovariables ;
+%let fecCal=$dateEXAMPLE;
 %let example_=$comboEXAMPLE;
 %let i_=$advancedStepperEXAMPLE0;
 %let x_=$advancedStepperEXAMPLE1;

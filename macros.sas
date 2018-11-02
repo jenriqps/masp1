@@ -74,18 +74,12 @@
 %mend;
 
 %macro visualizar(reserves=,premiums=,age=,benefit=);
-	title "Comparación de Reservas";
-	proc sgplot data=&reserves.;
-		series x=x_t y=t_V_P / markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
-		series x=x_t y=t_V_G / markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
-		series x=x_t y=t_V_E / y2axis markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
-		yaxis grid label="Reserva" /*max=&benefit.*/;
-		xaxis label="Edad" grid;	
-		refline &age. / label='Edad original' axis=x lineattrs=(color=red thickness=3 pattern=dash);
-		refline &benefit. / label='Beneficio' axis=y lineattrs=(color=red thickness=3 pattern=dash);
+
+	title "Primas. &fecCal";
+	proc print data=&premiums. label noobs;
 	run;
 	title;
-	
+
 	title "Comparación de Primas (monto)";
 	proc sgplot data=&premiums.;
 		vbar tipo_prima / response=monto group=monto groupdisplay=stack;
@@ -99,6 +93,25 @@
 		yaxis grid;
 	run;
 	title;
+
+	
+	title "Proyección de Reservas. &fecCal";
+	proc print data=&reserves. label noobs;
+	run;
+	title;
+
+	title "Comparación de Reservas";
+	proc sgplot data=&reserves.;
+		series x=x_t y=t_V_P / markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
+		series x=x_t y=t_V_G / markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
+		series x=x_t y=t_V_E / y2axis markers lineattrs=(pattern=10 thickness=4) markerattrs=(size=1);
+		yaxis grid label="Reserva" /*max=&benefit.*/;
+		xaxis label="Edad" grid;	
+		refline &age. / label='Edad original' axis=x lineattrs=(color=red thickness=3 pattern=dash);
+		refline &benefit. / label='Beneficio' axis=y lineattrs=(color=red thickness=3 pattern=dash);
+	run;
+	title;
+	
 %mend;
 
 %macro mortTable2Sankey(data=,age=,death=,alive=);
@@ -193,17 +206,17 @@
 			* Prima de tarifa;
 			G6=(&fxExp.*ILTplus[&x.+1, "aa_x"]+&bft.*ILTplus[&x.+1, 
 				"A_x"])/((1-&pcExp.)*ILTplus[&x.+1, "aa_x"]);
-			print G6;
+			*print G6;
 			* Prima neta;
 			P6=(&bft.*ILTplus[&x.+1, "A_x"])/(ILTplus[&x.+1, "aa_x"]);
-			print P6;
+			*print P6;
 			* Prima de gastos;
 			E6=G6-P6;
-			print E6;
+			*print E6;
 			namesRow={"Prima de Tarifa","Prima de Beneficios","Prima de Gastos"};
 			namesCol={"Tipo de Prima" "Monto"};
 			Pr=t(G6||P6||E6)||t(G6||P6||E6)/G6;
-			print Pr;
+			*print Pr;
 			* Reservas;
 			m=max(ILTplus[, "x"]-&x.);
 			t_V=j(m, 5, 0);
@@ -264,18 +277,18 @@
 			close input.iltplus;
 			* Beneficio;
 			bft=(&G.*ILTplus[&x.+1,"aa_x"]*(1-&pcExp.)-&fxInitExp.-&fxFinExp.*ILTplus[&x.+1,"A_x"])/ILTplus[&x.+1,"A_x"];
-			print bft;
+			*print bft;
 			call symputx('bft',bft);
 			* Prima neta;
 			P=(bft*ILTplus[&x.+1, "A_x"])/(ILTplus[&x.+1, "aa_x"]);
-			print P;
+			*print P;
 			* Prima de gastos;
 			E=&G.-P;
-			print E;
+			*print E;
 			namesRow={"Prima de Tarifa","Prima de Beneficios","Prima de Gastos"};
 			namesCol={"Tipo de Prima" "Monto"};
 			Pr=t(&G.||P||E)||t(&G.||P||E)/&G.;
-			print Pr;
+			*print Pr;
 		
 			* Reservas;
 			m=max(ILTplus[, "x"]-&x.);
@@ -302,7 +315,7 @@
 		
 		* Damos más propiedades a los metadatos;
 		proc sql;
-			create table Pr_Ex7_tipo(tipo_prima tipo_prima char(40));
+			create table Pr_Ex7_tipo(tipo_prima char(40));
 			insert into Pr_Ex7_tipo
 				values("Prima de Tarifa")
 				values("Prima de Beneficios")
@@ -369,18 +382,18 @@
 			G=(&fxInitExp.+((1+&fxExpXunitBft./&unitBft.)*&bft.+&fxFinExp.)*end(&x.,&n.,&i.,ILTplus)+
 			(&fxExp.+&fxExpXunitG./&unitBft.*&bft.)*termAn(&x.,&n.,&i.,ILTplus))
 				/((1-&pcExp.)*termAn(&x.,&n.,&i.,ILTplus)-(&pcInitExp.-&pcExp.));	
-			print G;
+			*print G;
 			* Prima neta;
 			P=&bft.*end(&x.,&n.,&i.,ILTplus)/termAn(&x.,&n.,&i.,ILTplus);
-			print P;
+			*print P;
 			
 			* Prima de gastos;
 			E=G-P;
-			print E;
+			*print E;
 			namesRow={"Prima de Tarifa","Prima de Beneficios","Prima de Gastos"};
 			namesCol={"Tipo de Prima" "Monto"};
 			Pr=t(G||P||E)||t(G||P||E)/G;
-			print Pr;
+			*print Pr;
 			* Reservas;
 			m=&n.+1;
 			t_V=j(m, 5, 0);
