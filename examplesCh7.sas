@@ -31,6 +31,33 @@ run;
 
 %tablaDickson(A=&Ap.,B=&Bp.,c=&cp.,c2=&c2p.,l_radix=&l_radixp.,x_radix=&x_radixp.,x_end=&x_endp.,i=&ip.);
 
+* Ejemplo 10;
+
+proc iml;
+	edit trsf.slt;
+	read all var _NUM_ into slt[colname=numVars];
+	close trsf.slt; 
+	
+	print slt;
+	
+	start an_temporal(x,s,ps,tm,n,i);
+		if s=1 & n>=ps then
+		an=tm[x-18+1,7] - tm[x+n-20+1,9]*(1+i)**(-n)*tm[x+n-20+1,5]/tm[x-18+1,3];
+		if s=1 & n<ps then
+		an=tm[x-18+1,7] - tm[x+n-19+1,8]*(1+i)**(-n)*tm[x+n-19+1,4]/tm[x-18+1,3];
+		if s=0 then
+		an=tm[x-20+1,9] - tm[x+n-20+1,9]*(1+i)**(-n)*tm[x+n-20+1,5]/tm[x-20+1,5];
+		
+		return(an);
+	finish;
+	
+	a1=an_temporal(50,1,2,slt,10,0.05);
+	print a1;
+	a2=an_temporal(55,0,2,slt,5,0.05);
+	print a2;
+	
+run;
+
 
 
 
