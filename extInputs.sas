@@ -80,4 +80,25 @@ data input.portfolio_02;
 		
 run;
 
+* Importación de la experiencia de los factores de riesgo para ejemplo de asset shares;
+FILENAME REFFILE4 "&origen./inputs/files/assetShareAssumptions.xlsx";
+
+PROC IMPORT DATAFILE=REFFILE4
+	DBMS=XLSX
+	OUT=WORK.assetShareAssmpts replace;
+	GETNAMES=YES;
+RUN;
+
+%web_open_table(WORK.IMPORT);
+
+data input.assetShareAssmpts;
+	format t comma3. interest mortality_rate annual_exp  percentn10.4 pymt_ben_exp dollar10.2 ;
+	set WORK.assetShareAssmpts;
+	label t = "Tiempo (años)"
+		interest = "Tasa de interés"
+		mortality_rate = "Tasa de mortalidad"	
+		annual_exp = "Gastos anuales (% de la prima)"
+		pymt_ben_exp = "Gastos por pago de beneficio"
+		;		
+run;
 
