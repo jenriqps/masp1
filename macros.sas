@@ -8,6 +8,7 @@
  *******************/
 
 %macro seguroVitalicio(A=, B=, c=, i=, p=, x=);
+* Macro para calcular la tabla de mortalidad Bowers;
 	proc iml;
 		* VPA de una anualidad con ley de Makeham;
 		start segVit(A, B, c, i, p, x);
@@ -74,7 +75,7 @@
 %mend;
 
 %macro visualizar(reserves=,premiums=,age=,benefit=);
-
+* Macro para hacer visualizaciones (gráficas);
 	title "Primas. &fecCal";
 	proc print data=&premiums. label noobs;
 	run;
@@ -185,7 +186,7 @@
 %mend;
 
 %macro examplesChapter7(example=,i=,x=,bft=,fxExp=,pcExp=,fxInitExp=,fxFinExp=,G=,n=,unitBft=,fxExpXunitBft=,fxExpXunitG=,pcInitExp=);
-
+* Macro para hacer los ejemplos de prima de tarifa de las notas de clase;
 %let A=0.0007;
 %let B=0.00005;
 %let c= 1.096478196143;
@@ -507,7 +508,7 @@
 %mend;
 
 %macro tablaDickson(A=,B=,c=,c2=,l_radix=,x_radix=,x_end=,i=);
-	* Construimos la tabla Dickson;
+	* Cálculo de la tabla Dickson;
 	proc iml;
 		* Creamos la matriz que contendrá la tabla;
 		SLT=j(&x_end.-&x_radix.+1,9,0);
@@ -596,9 +597,7 @@
 		;
 		set trsf.SLT;
 	run;	
-	
-	proc print data=trsf.SLT label noobs;
-	run;
+
 
 %mend;
 
