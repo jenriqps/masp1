@@ -190,10 +190,9 @@
 %let A=0.0007;
 %let B=0.00005;
 %let c= 1.096478196143;
-%let i=0.06;
 %let p=1000;
 %let xmax=110;
-%seguroVitalicio(A=&A., B=&B., c=&c., i=&i., p=&p., x=&xmax.);
+%seguroVitalicio(A=&A., B=&B., c=&c., i=&i_., p=&p., x=&xmax.);
 
 * Implementamos la solución en proc iml;
 

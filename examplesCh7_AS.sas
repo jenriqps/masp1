@@ -31,7 +31,7 @@ run;
 proc iml;
 	edit trsf.slt;
 	read all var _NUM_ into slt[colname=numVars];
-	close trsf.slt; 
+	close trsf.slt; 	
 
 	start p_sprv(x,s,ps,tm,n);
 	/*
@@ -137,22 +137,33 @@ proc iml;
 		return(incSeg);
 	finish;
 	
-	* Cálculo de valores presentes actuariales necesarios para las reservas;
-	a1=an_temporal(50,1,2,slt,10,0.05);
-	a2=an_temporal(55,0,2,slt,5,0.05);
-	a3=an_vitalicia(60,0,slt);
-	a4=an_vitalicia(65,0,slt);
-	s1=seg_temporal(50,1,2,slt,10,0.05);
-	s2=seg_temporal(55,0,2,slt,5,0.05);
-	is1=incSeg_temporal(50,1,2,slt,10,0.05);
-	is2=incSeg_temporal(55,0,2,slt,5,0.05);
-	title "Reservas";
+	* Parámetros;
+	x=50;
+	n1=10;
+	t1=5;
+	t2=15;
+	i=0.05;
+	bft=10000;
+	exp_bft1=25;
+	exp_bft2=100;
 	G=11900;
-	V0=G*is1+100*s1+10025*(1.05)**(-10)*a3*p_sprv(50,1,2,slt,10)-(0.95*a1-0.05)*G;
+	
+	
+	* Cálculo de valores presentes actuariales necesarios para las reservas;
+	a1=an_temporal(x,1,2,slt,n1,i);
+	a2=an_temporal(x+t1,0,2,slt,n1-t1,i);
+	a3=an_vitalicia(60,0,slt);
+	a4=an_vitalicia(x+t2,0,slt);
+	s1=seg_temporal(x,1,2,slt,n1,i);
+	s2=seg_temporal(x+t1,0,2,slt,n1-t1,i);
+	is1=incSeg_temporal(x,1,2,slt,n1,i);
+	is2=incSeg_temporal(x+t1,0,2,slt,n1-t1,i);
+	title "Reservas";
+	V0=G*is1+exp_bft2*s1+(bft+exp_bft1)*(1+i)**(-10)*a3*p_sprv(x,1,2,slt,10)-(0.95*a1-0.05)*G;
 	print V0;
-	V5=G*(is2+5*s2)+100*s2+10025*1.05**(-5)*p_sprv(55,0,2,slt,5)*a3-0.95*G*a2;	
+	V5=G*(is2+5*s2)+exp_bft2*s2+(bft+exp_bft1)*(1+i)**(-5)*p_sprv(55,0,2,slt,5)*a3-0.95*G*a2;	
 	print V5;
-	V15=10025*a4;
+	V15=(bft+exp_bft1)*a4;
 	print V15;
 run;
 
